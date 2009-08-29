@@ -15,7 +15,7 @@ def _send(host,port,data,debug=False):
 parser = OptionParser()
 #Network
 parser.add_option("-H","--hostname",dest="host",default="localhost")
-parser.add_option("-p","--port",dest="port",help="port to listen on",type="int",default=23053)
+parser.add_option("-p","--port",dest="port",help="port to send on",type="int",default=23053)
 parser.add_option("-P","--password",dest="password",help="network password")
 
 #Other

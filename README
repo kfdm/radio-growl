@@ -1,0 +1,14 @@
+Small test program I wrote to test my growl library (http://github.com/kfdm/gntp/)
+Queries AnimeNFO (http://www.animenfo.com/radio/) and sends a growl message
+
+Usage: radio.py [options]
+
+Options:
+  -h, --help            show this help message and exit
+  -H HOST, --hostname=HOST
+  -p PORT, --port=PORT  port to send on
+  -P PASSWORD, --password=PASSWORD
+                        network password
+  -a APP, --appname=APP
+  -t TITLE, --title=TITLE
+  -d, --debug           Print raw growl packets
