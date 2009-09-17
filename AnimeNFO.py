@@ -61,7 +61,7 @@ def now_playing():
 
 def upcomming():
 	url = 'http://www.animenfo.com/radio/nowplaying.php'
-	data = urllib.urlencode({'ajax':'true','mod':'queue'})
+	data = urllib.urlencode({'ajax':'true','mod':'queue','togglefull':'true'})
 	page = urllib.urlopen(url, data)
 	page = page.read()
 
