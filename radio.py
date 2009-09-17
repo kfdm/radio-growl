@@ -28,11 +28,13 @@ parser.add_option("-d","--debug",dest='debug',help="Print raw growl packets",act
 appicon = 'http://www.animenfo.com/favicon.ico'
 playing = AnimeNFO.now_playing()
 title = '%s - %s - %s'%(playing.title,playing.artist,playing.album)
+title = unicode(title,'utf8')
 message = '[%s/%s]  Rating:[%s/10]'%(
 			playing.duration[0],
 			playing.duration[1],
 			playing.rating
 		)
+message = unicode(message,'utf8')
 
 #Registration Message
 register = gntp.GNTPRegister(password=options.password)
