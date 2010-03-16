@@ -2,9 +2,9 @@ import urllib, re
 import xml.sax.saxutils as saxutils
 from BeautifulSoup import BeautifulStoneSoup
 
-BASE_URL = 'http://www.animenfo.com/radio/'
-API_URL	= 'http://www.animenfo.com/radio/nowplaying.php'
-PLAY_URL = 'http://www.animenfo.com/radio/listen.m3u'
+BASE_URL = 'https://www.animenfo.com/radio/'
+API_URL	= 'https://www.animenfo.com/radio/nowplaying.php'
+PLAY_URL = 'https://www.animenfo.com/radio/listen.m3u'
 
 #curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
 
@@ -60,9 +60,8 @@ def now_playing():
 	return song
 
 def upcomming():
-	url = 'http://www.animenfo.com/radio/nowplaying.php'
 	data = urllib.urlencode({'ajax':'true','mod':'queue','togglefull':'true'})
-	page = urllib.urlopen(url, data)
+	page = urllib.urlopen(API_URL, data)
 	page = page.read()
 
 	results = BeautifulStoneSoup(page).findAll('td')
