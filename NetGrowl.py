@@ -27,7 +27,7 @@ class NetGrowl:
 			print e
 		except gntp.BaseError,e:
 			print e
-	def notice(self,name,notification,title,text,callback=None,image=None):
+	def notice(self,name,notification,title,text,callback=None,image=None,loop=False):
 		notice = gntp.GNTPNotice(password=self.password)
 		notice.add_header('Application-Name',name)
 		notice.add_header('Notification-Name',notification)
@@ -44,3 +44,6 @@ class NetGrowl:
 			print e
 		except gntp.BaseError,e:
 			print e
+		except UnicodeDecodeError:
+			if loop: print e
+			else: self.notice(name, notification, title, u"Error with String",loop=True)
