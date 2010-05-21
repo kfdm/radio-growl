@@ -44,6 +44,6 @@ class NetGrowl:
 			print e
 		except gntp.BaseError,e:
 			print e
-		except UnicodeDecodeError:
+		except UnicodeDecodeError, e:
 			if loop: print e
-			else: self.notice(name, notification, title, u"Error with String",loop=True)
+			else: self.notice(name, notification, title, "Error with String",loop=True)
