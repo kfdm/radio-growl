@@ -1,6 +1,6 @@
 import Config
 import AnimeNFO
-import NetGrowl
+from gntp_notifier import GrowlNotifier
 import time
 	
 def _to_seconds(time):
@@ -9,12 +9,14 @@ def _to_seconds(time):
 
 config	= Config.Config('~/.radio-growl')
 
-growl = NetGrowl.NetGrowl(config.host,config.port,config.password)
-growl.register(
-	config.appname,
-	config.title,
-	config.icon
+growl = GrowlNotifier(
+	applicationName = config.appname,
+	notifications = [config.title],
+	applicationIcon = config.icon,
+	hostname = config.host,
+	password = config.password
 )
+growl.register()
 
 previous = ''
 while(1):
@@ -26,22 +28,21 @@ while(1):
 			print 'Timeout.  Sleeping for 20'
 			time.sleep(20)
 			continue
-		title = '%s - %s - %s'%(playing.title,playing.artist,playing.album)
+		title = u'%s - %s - %s'%(playing.title,playing.artist,playing.album)
 		if title != previous:
 			previous = title
-			message = '[%s/%s]  Rating:[%s/10]'%(
+			message = u'[%s/%s]  Rating:[%s/10]'%(
 						playing.duration[0],
 						playing.duration[1],
 						playing.rating
 					)
 			print title,message
-			growl.notice(
-				config.appname,
-				config.title,
-				title,
-				message,
-				AnimeNFO.PLAY_URL,
-				playing.image
+			growl.notify(
+				noteType=config.title,
+				title=title,
+				description=message,
+				icon=playing.image,
+				#callback=AnimeNFO.PLAY_URL,
 			)
 		time_left = _to_seconds(playing.duration[0])
 		print 'Sleepting for',time_left
