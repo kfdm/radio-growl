@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import Config
 import AnimeNFO
 from gntp_notifier import GrowlNotifier
