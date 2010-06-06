@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import Config
 import AnimeNFO
-from gntp_notifier import GrowlNotifier
+from gntp.notifier import GrowlNotifier
 import time
 	
 def _to_seconds(time):
