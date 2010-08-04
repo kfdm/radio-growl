@@ -3,14 +3,15 @@ import Config
 import AnimeNFO
 from gntp.notifier import GrowlNotifier
 
-config	= Config.Config('~/.radio-growl')
+config	= Config.Config('~/.gntp')
 growl = GrowlNotifier(
-	applicationName = config.appname,
-	notifications = [config.title],
-	applicationIcon = config.icon,
-	hostname = config.host,
-	password = config.password
+	applicationName = config['radio.appname'],
+	notifications = [config['radio.title']],
+	applicationIcon = config['radio.icon'],
+	hostname = config['gntp.host'],
+	password = config['gntp.password']
 )
+growl.debug = config['radio.debug']
 growl.register()
 
 #Now Playing Strings
@@ -23,7 +24,7 @@ message = u'[%s/%s]  Rating:[%s/10]'%(
 )
 
 growl.notify(
-	noteType=config.title,
+	noteType=config['radio.title'],
 	title=title,
 	description=message,
 	icon=playing.image,
