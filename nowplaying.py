@@ -1,15 +1,16 @@
 #!/usr/bin/env python
-import Config
 import AnimeNFO
 from gntp.notifier import GrowlNotifier
+from config import RadioConfig
 
-config	= Config.Config('~/.gntp')
+config	= RadioConfig('~/.gntp')
 growl = GrowlNotifier(
 	applicationName = config['radio.appname'],
 	notifications = [config['radio.title']],
 	applicationIcon = config['radio.icon'],
 	hostname = config['gntp.host'],
-	password = config['gntp.password']
+	password = config['gntp.password'],
+	port = config['gntp.port']
 )
 growl.debug = config['radio.debug']
 growl.register()

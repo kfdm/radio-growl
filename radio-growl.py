@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-import Config
 import AnimeNFO
 from gntp.notifier import GrowlNotifier
+from config import RadioConfig
 import time
 	
 def _to_seconds(time):
 	time = time.split(':')
 	return 60*int(time[0]) + int(time[1])
 
-config	= Config.Config('~/.gntp')
+config	= RadioConfig('~/.gntp')
 
 growl = GrowlNotifier(
 	applicationName = config['radio.appname'],
