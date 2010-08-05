@@ -15,7 +15,8 @@ growl = GrowlNotifier(
 	notifications = [config['radio.title']],
 	applicationIcon = config['radio.icon'],
 	hostname = config['gntp.host'],
-	password = config['gntp.password']
+	password = config['gntp.password'],
+	port = config['gntp.port']
 )
 growl.debug = config['radio.debug']
 growl.register()
