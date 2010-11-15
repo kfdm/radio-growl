@@ -1,10 +1,9 @@
-import urllib, re
-import xml.sax.saxutils as saxutils
+import urllib, urllib2, re
 from BeautifulSoup import BeautifulStoneSoup
 
-BASE_URL = 'https://www.animenfo.com/radio/'
-API_URL	= 'https://www.animenfo.com/radio/nowplaying.php'
-PLAY_URL = 'https://www.animenfo.com/radio/listen.m3u'
+BASE_URL = 'http://www.animenfo.com/radio/'
+API_URL	= 'http://www.animenfo.com/radio/nowplaying.php'
+PLAY_URL = 'http://www.animenfo.com/radio/listen.m3u'
 
 #curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
 
@@ -28,7 +27,7 @@ class Song(object):
 
 def now_playing():
 	data = urllib.urlencode({'ajax':'true','mod':'playing'})
-	page = urllib.urlopen(API_URL, data)
+	page = urllib2.urlopen(API_URL, data)
 	page = page.read()
 	song = Song()
 	
@@ -49,7 +48,7 @@ def now_playing():
 	
 	try:
 		song.image = re.findall('src="(pictures\/.+?)"',page)[0]
-		song.image = BASE_URL+song.image
+		song.image = BASE_URL+urllib.quote(song.image)
 	except: song.image = None
 	
 	
@@ -61,7 +60,7 @@ def now_playing():
 
 def upcomming():
 	data = urllib.urlencode({'ajax':'true','mod':'queue','togglefull':'true'})
-	page = urllib.urlopen(API_URL, data)
+	page = urllib2.urlopen(API_URL, data)
 	page = page.read()
 
 	results = BeautifulStoneSoup(page).findAll('td')
