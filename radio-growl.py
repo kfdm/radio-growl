@@ -47,8 +47,8 @@ while(1):
 				icon=playing.image,
 				#callback=AnimeNFO.PLAY_URL,
 			)
-		time_left = _to_seconds(playing.duration[0])
-		print 'Sleepting for',time_left
+		try:	time_left = _to_seconds(playing.duration[0])
+		except:	time_left = 20
 		time.sleep(time_left+5)
 	except KeyboardInterrupt:
 		break
