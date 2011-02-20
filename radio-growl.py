@@ -1,25 +1,13 @@
 #!/usr/bin/env python
-import pydefaults
 import AnimeNFO
-from gntp.notifier import GrowlNotifier
+import Growl
 import time
 	
 def _to_seconds(time):
 	time = time.split(':')
 	return 60*int(time[0]) + int(time[1])
 
-gntp = pydefaults.database('com.github.kfdm.gntp')
-radio = pydefaults.database('com.github.kfdm.radio')
-
-growl = GrowlNotifier(
-	applicationName = radio['appname'],
-	notifications = [radio['title']],
-	applicationIcon = radio['icon'],
-	hostname = gntp['host'],
-	password = gntp['password'],
-	port = gntp['port']
-)
-growl.debug = radio['debug']
+growl = Growl.GrowlNotifier()
 growl.register()
 
 previous = ''
@@ -41,13 +29,7 @@ while(1):
 						playing.rating
 					)
 			print title,message
-			growl.notify(
-				noteType=radio['title'],
-				title=title,
-				description=message,
-				icon=playing.image,
-				#callback=AnimeNFO.PLAY_URL,
-			)
+			growl.alert(title,message,playing.image)
 		try:	time_left = _to_seconds(playing.duration[0])
 		except:	time_left = 20
 		time.sleep(time_left+5)

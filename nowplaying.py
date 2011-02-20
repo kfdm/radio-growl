@@ -1,20 +1,8 @@
 #!/usr/bin/env python
-import pydefaults
 import AnimeNFO
-from gntp.notifier import GrowlNotifier
+import Growl
 
-gntp = pydefaults.database('com.github.kfdm.gntp')
-radio = pydefaults.database('com.github.kfdm.radio')
-
-growl = GrowlNotifier(
-	applicationName = radio['appname'],
-	notifications = [radio['title']],
-	applicationIcon = radio['icon'],
-	hostname = gntp['host'],
-	password = gntp['password'],
-	port = gntp['port']
-)
-growl.debug = radio['debug']
+growl = Growl.GrowlNotifier()
 growl.register()
 
 #Now Playing Strings
@@ -26,10 +14,4 @@ message = u'[%s/%s]  Rating:[%s/10]'%(
 	playing.rating
 )
 
-growl.notify(
-	noteType=config['radio.title'],
-	title=title,
-	description=message,
-	icon=playing.image,
-	#callback=AnimeNFO.PLAY_URL,
-)
+growl.alert(title,message,playing.image)
