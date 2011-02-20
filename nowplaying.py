@@ -1,18 +1,20 @@
 #!/usr/bin/env python
+import pydefaults
 import AnimeNFO
 from gntp.notifier import GrowlNotifier
-from config import RadioConfig
 
-config	= RadioConfig('~/.gntp')
+gntp = pydefaults.database('com.github.kfdm.gntp')
+radio = pydefaults.database('com.github.kfdm.radio')
+
 growl = GrowlNotifier(
-	applicationName = config['radio.appname'],
-	notifications = [config['radio.title']],
-	applicationIcon = config['radio.icon'],
-	hostname = config['gntp.host'],
-	password = config['gntp.password'],
-	port = config['gntp.port']
+	applicationName = radio['appname'],
+	notifications = [radio['title']],
+	applicationIcon = radio['icon'],
+	hostname = gntp['host'],
+	password = gntp['password'],
+	port = gntp['port']
 )
-growl.debug = config['radio.debug']
+growl.debug = radio['debug']
 growl.register()
 
 #Now Playing Strings
