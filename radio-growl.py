@@ -2,7 +2,13 @@
 import AnimeNFO
 import Growl
 import time
-	
+
+try: 
+	import setproctitle
+	setproctitle.setproctitle('radio-growl')
+except ImportError:
+	pass
+
 def _to_seconds(time):
 	time = time.split(':')
 	return 60*int(time[0]) + int(time[1])
