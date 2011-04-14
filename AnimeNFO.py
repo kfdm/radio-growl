@@ -60,7 +60,7 @@ def upcomming():
 	page = urllib2.urlopen(API_URL, data)
 	page = page.read()
 
-	results = BeautifulStoneSoup(page).findAll('td')
+	results = BeautifulStoneSoup(page).findAll('tr')
 	
 	results.pop()
 	
@@ -70,6 +70,7 @@ def upcomming():
 		if row.strip()==u'': continue
 		row = BeautifulStoneSoup(row,convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 		row = row.__str__().strip()
+		row = re.sub('\s+',' ',row)
 		songs.append(row)
 	return songs
 
