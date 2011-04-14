@@ -5,8 +5,6 @@ BASE_URL = 'http://www.animenfo.com/radio/'
 API_URL	= 'http://www.animenfo.com/radio/nowplaying.php'
 PLAY_URL = 'http://www.animenfo.com/radio/listen.m3u'
 
-#curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
-
 class Song(object):
 	def __init__(self):
 		self.artist = '<Artist>'
@@ -25,40 +23,39 @@ class Song(object):
 			self.rating
 		)
 
+def _find(regex,source,default):
+	'''Find a string using a regex and strip extra HTML'''
+	try:
+		string = re.findall(regex, source)[0]
+		string = ''.join(BeautifulStoneSoup(string).findAll(text=True)) 
+		return BeautifulStoneSoup(string,convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
+	except:
+		return default
+
 def now_playing():
+	#curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
 	data = urllib.urlencode({'ajax':'true','mod':'playing'})
 	page = urllib2.urlopen(API_URL, data)
 	page = page.read()
 	song = Song()
 	
-	try: song.artist = re.findall('Artist: (.+?)<br/>', page)[0]
-	except: song.artist = 'Artist'
-	
-	try: song.title = re.findall('Title: (.+?)<br/>', page)[0]
-	except: song.title = 'Title'
-	
-	try: song.album = re.findall('Album: (.+?)<br/>', page)[0]
-	except: song.album = 'Album'
+	song.artist = _find('Artist: (.+?)<br/>', page, 'Artist')
+	song.title = _find('Title: (.+?)<br/>', page, 'Title')
+	song.album = _find('Album: (.+?)<br/>', page,'Album')
+	song.rating = _find('Rating: (.+?) .+<br/>', page, 'Rating')
 	
 	try: song.duration = re.findall('Duration: <span .+>(.+?)</span> / (.+?)<br/>', page)[0]
 	except: song.duration = (0,0)
-	
-	try: song.rating = re.findall('Rating: (.+?) .+<br/>', page)[0]
-	except: song.rating = 'Rating'
 	
 	try:
 		song.image = re.findall('src="(pictures\/.+?)"',page)[0]
 		song.image = BASE_URL+urllib.quote(song.image)
 	except: song.image = None
 	
-	
-	song.artist	= BeautifulStoneSoup(song.artist,convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-	song.title	= BeautifulStoneSoup(song.title,convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-	song.album	= BeautifulStoneSoup(song.album,convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-	
 	return song
 
 def upcomming():
+	#curl -d ajax=true -d mod=queue http://www.animenfo.com/radio/nowplaying.php
 	data = urllib.urlencode({'ajax':'true','mod':'queue','togglefull':'true'})
 	page = urllib2.urlopen(API_URL, data)
 	page = page.read()

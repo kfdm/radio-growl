@@ -4,6 +4,6 @@ setup(
 	description='AnimeNFO Radio Notifier',
 	author='Paul Traylor',
 	url='http://github.com/kfdm/radio-growl',
-	version='0.1',
+	version='0.2',
 	py_modules=['AnimeNFO'],
 	)
