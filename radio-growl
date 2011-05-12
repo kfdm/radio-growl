@@ -36,7 +36,6 @@ class Radio(daemon.Daemon):
 					logging.debug('Timeout.  Sleeping for 20')
 					time.sleep(20)
 		growl = Growl.GrowlNotifier()
-		growl.register()
 		previous = ''
 		while(True):
 			playing = now_playing()

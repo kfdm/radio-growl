@@ -1,5 +1,6 @@
 import pydefaults
 import gntp.notifier
+import logging
 
 gntp_settings = pydefaults.database('com.github.kfdm.gntp')
 radio_settings = pydefaults.database('com.github.kfdm.radio')
@@ -14,11 +15,21 @@ class GrowlNotifier(gntp.notifier.GrowlNotifier):
 		self.password = gntp_settings['password']
 		self.port = gntp_settings['port']
 		self.debug = radio_settings['debug']
+		
+		try:
+			self.register()
+		except:
+			logging.getLogger(__name__).exception('Is growl running ? Exiting....')
+			exit()
+			
 	def alert(self,title,message,image):
-		self.notify(
-			noteType=radio_settings['title'],
-			title=title,
-			description=message,
-			icon=image,
-			#callback=AnimeNFO.PLAY_URL,
-		)
+		try:
+			self.notify(
+				noteType=radio_settings['title'],
+				title=title,
+				description=message,
+				icon=image,
+				#callback=AnimeNFO.PLAY_URL,
+				)
+		except:
+			logging.getLogger(__name__).exception('Is growl running ?')
