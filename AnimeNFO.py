@@ -79,7 +79,8 @@ if __name__=='__main__':
 	list = upcomming()
 	print 'Now Playing'
 	print song
-	print song.image.replace(' ','%20')
+	if song.image:
+		print song.image.replace(' ','%20')
 	print
 	print 'Upcomming'
 	for item in list:
