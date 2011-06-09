@@ -44,7 +44,7 @@ def now_playing():
 	song.album = _find('Album: (.+?)<br/>', page,'Album')
 	song.rating = _find('Rating: (.+?) .+<br/>', page, 'Rating')
 	
-	try: song.duration = re.findall('Duration: <span .+>(.+?)</span> / (.+?)<br/>', page)[0]
+	try: song.duration = re.findall('Duration: <span .+>(.+?)</span> / <span .+>(.+?)</span><br/>', page)[0]
 	except: song.duration = (0,0)
 	
 	try:
