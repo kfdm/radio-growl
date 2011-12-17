@@ -1,0 +1,9 @@
+AnimeNFO.py
+README
+setup-cli.py
+setup.py
+AnimeNFO.egg-info/PKG-INFO
+AnimeNFO.egg-info/SOURCES.txt
+AnimeNFO.egg-info/dependency_links.txt
+AnimeNFO.egg-info/requires.txt
+AnimeNFO.egg-info/top_level.txt
