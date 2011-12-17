@@ -2,7 +2,6 @@ import pydefaults
 import gntp.notifier
 import logging
 
-gntp_settings = pydefaults.database('com.github.kfdm.gntp')
 radio_settings = pydefaults.database('com.github.kfdm.radio')
 
 class GrowlNotifier(gntp.notifier.GrowlNotifier):
@@ -11,9 +10,9 @@ class GrowlNotifier(gntp.notifier.GrowlNotifier):
 		self.notifications = [radio_settings['title']]
 		self.defaultNotifications = self.notifications
 		self.applicationIcon = radio_settings['icon']
-		self.hostname = gntp_settings['host']
-		self.password = gntp_settings['password']
-		self.port = int(gntp_settings['port'])
+		self.hostname = radio_settings['host']
+		self.password = radio_settings['password']
+		self.port = int(radio_settings['port'])
 		self.debug = radio_settings['debug']
 		
 		try:
