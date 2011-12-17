@@ -12,5 +12,5 @@ setup(
     url='http://github.com/kfdm/radio-growl',
     version='0.2',
     py_modules=['AnimeNFO'],
-    install_requires=['BeautifulSoup']
+    install_requires=['BeautifulSoup', 'gntp', 'clint']
 )

@@ -13,7 +13,7 @@ class GrowlNotifier(gntp.notifier.GrowlNotifier):
 		self.applicationIcon = radio_settings['icon']
 		self.hostname = gntp_settings['host']
 		self.password = gntp_settings['password']
-		self.port = gntp_settings['port']
+		self.port = int(gntp_settings['port'])
 		self.debug = radio_settings['debug']
 		
 		try:
