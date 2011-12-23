@@ -11,6 +11,6 @@ setup(
     author='Paul Traylor',
     url='http://github.com/kfdm/radio-growl',
     version='0.2',
-    py_modules=['AnimeNFO'],
+    packages=['AnimeNFO'],
     install_requires=['BeautifulSoup']
 )

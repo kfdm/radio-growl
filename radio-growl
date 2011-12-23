@@ -6,7 +6,7 @@ import optparse
 import os
 
 import AnimeNFO
-from cli import Growl, daemon
+from AnimeNFO.cli import Growl, daemon
 
 LOG_FORMAT  = '%(asctime)s %(levelname)-8s %(name)-12s %(message)s'
 DEFAULT_PID = os.path.realpath('./radio.pid')

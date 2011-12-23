@@ -1,7 +1,7 @@
-AnimeNFO.py
 README
 setup-cli.py
 setup.py
+AnimeNFO/__init__.py
 AnimeNFO.egg-info/PKG-INFO
 AnimeNFO.egg-info/SOURCES.txt
 AnimeNFO.egg-info/dependency_links.txt
