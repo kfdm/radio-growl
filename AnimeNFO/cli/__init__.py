@@ -2,28 +2,29 @@
 
 import time
 import logging
-import optparse
+import argparse
 import os
 
 import AnimeNFO
 from AnimeNFO.cli import Growl, daemon
 
-LOG_FORMAT  = '%(asctime)s %(levelname)-8s %(name)-12s %(message)s'
+LOG_FORMAT = '%(asctime)s %(levelname)-8s %(name)-12s %(message)s'
 DEFAULT_PID = os.path.realpath('./radio.pid')
 DEFAULT_LOG = os.path.realpath('./radio.log')
 
-class Parser(optparse.OptionParser):
-	def __init__(self):
-		def store_path(option, opt, value, parser):
-			setattr(parser.values, option.dest, os.path.realpath(value))
 
-		optparse.OptionParser.__init__(self, usage="%prog [options] (start|stop|restart)")
-		self.add_option('-p', '--pid', dest='pid', default=DEFAULT_PID,
-			action='callback', callback=store_path, type=str)
-		self.add_option('-l', '--log', dest='log', default=DEFAULT_LOG,
-			action='callback', callback=store_path, type=str)
-		self.add_option('-v', '--verbose', dest='verbose', default=logging.INFO,
+class Parser(argparse.ArgumentParser):
+	def __init__(self):
+		def store_path(value):
+			return os.path.realpath(value)
+
+		argparse.ArgumentParser.__init__(self)
+		self.add_argument('-p', '--pid', default=DEFAULT_PID, type=store_path)
+		self.add_argument('-l', '--log', default=DEFAULT_LOG, type=store_path)
+		self.add_argument('-v', '--verbose', default=logging.INFO,
 			action='store_const', const=logging.DEBUG)
+		self.add_argument('daemon', nargs='?', choices=['start', 'stop', 'restart'])
+
 
 class Radio(daemon.Daemon):
 	def run(self, loop=True):
@@ -60,8 +61,6 @@ class Radio(daemon.Daemon):
 			logging.debug('Sleeping for %d', time_left)
 			time.sleep(time_left + 5)
 
-(options, args) = Parser().parse_args()
-radio = Radio(options.pid)
 
 def main():
 	try:
@@ -70,21 +69,24 @@ def main():
 	except ImportError:
 		pass
 
-	if 'start' in args:
+	options = Parser().parse_args()
+	radio = Radio(options.pid)
+
+	if options.daemon == 'start':
 		logging.basicConfig(
 			level=options.verbose,
 			filename=options.log,
 			format=LOG_FORMAT
 		)
 		radio.start()
-	elif 'restart' in args:
+	elif options.daemon == 'restart':
 		logging.basicConfig(
 			level=options.verbose,
 			filename=options.log,
 			format=LOG_FORMAT
 		)
 		radio.restart()
-	elif 'stop' in args:
+	elif options.daemon == 'stop':
 		radio.stop()
 	else:
 		logging.basicConfig(level=options.verbose, format=LOG_FORMAT)
