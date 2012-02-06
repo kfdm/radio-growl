@@ -25,11 +25,12 @@ class Parser(argparse.ArgumentParser):
 		self.add_argument('-p', '--pid', default=DEFAULT_PID, type=store_path)
 		self.add_argument('-l', '--log', default=DEFAULT_LOG, type=store_path)
 		self.add_argument('-v', '--verbose', action='count', default=0)
+		self.add_argument('--cache', dest='use_cache', action='store_true')
 		self.add_argument('daemon', nargs='?', choices=['start', 'stop', 'restart'])
 
 
 class Radio(daemon.Daemon):
-	def run(self, loop=True):
+	def run(self, loop=True, use_cache=False):
 		def to_seconds(time):
 			try:
 				time = time.split(':')
@@ -44,7 +45,7 @@ class Radio(daemon.Daemon):
 				except IOError:
 					logging.debug('Timeout.  Sleeping for 20')
 					time.sleep(20)
-		growl = Growl.GrowlNotifier()
+		growl = Growl.GrowlNotifier(use_cache)
 		previous = ''
 		while(True):
 			playing = now_playing()
@@ -70,26 +71,19 @@ def main():
 	options = Parser().parse_args()
 	options.verbose = logging.WARNING - options.verbose * 10
 	radio = Radio(options.pid)
+	radio.options = options
 
-	if options.daemon == 'start':
-		logging.basicConfig(
-			level=options.verbose,
-			filename=options.log,
-			format=LOG_FORMAT
-		)
-		radio.start()
-	elif options.daemon == 'restart':
-		logging.basicConfig(
-			level=options.verbose,
-			filename=options.log,
-			format=LOG_FORMAT
-		)
-		radio.restart()
-	elif options.daemon == 'stop':
-		radio.stop()
-	else:
+	if options.daemon is None:
 		logging.basicConfig(level=options.verbose, format=LOG_FORMAT)
-		radio.run(False)
+		radio.run(False, options.use_cache)
+	else:
+		logging.basicConfig(level=options.verbose, format=LOG_FORMAT, filename=options.log)
+		if options.daemon == 'start':
+			radio.start()
+		elif options.daemon == 'restart':
+			radio.restart()
+		elif options.daemon == 'stop':
+			radio.stop()
 
 if __name__ == '__main__':
 	main()

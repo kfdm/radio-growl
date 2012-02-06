@@ -7,13 +7,15 @@ logger = logging.getLogger(__name__)
 
 
 class GrowlNotifier(gntp.config.GrowlNotifier):
-	def __init__(self):
+	def __init__(self, use_cache=False):
 		gntp.notifier.GrowlNotifier.__init__(
 			self,
 			applicationName='AnimeNFO Radio',
 			notifications=['Now Playing'],
 			applicationIcon='http://www.animenfo.com/favicon.ico',
 		)
+
+		self.use_cache = use_cache
 
 		resources.init('kfdm', 'radio-growl')
 
@@ -27,19 +29,18 @@ class GrowlNotifier(gntp.config.GrowlNotifier):
 		pass
 
 	def alert(self, title, message, image, callback):
-		data = None
-		image_path = None
-		image_name = image.split('/').pop()
-		with resources.cache.open(image_name, 'w+') as f:
-			logger.info('Opening %s', f.name)
-			image_path = f.name
-			data = f.read()
-			if len(data) is 0:
-				logger.info('Downloading: %s', image)
-				data = urllib2.urlopen(image).read()
-				f.write(data)
-			else:
+		if self.use_cache:
+			data = None
+			image_name = image.split('/').pop()
+			with resources.cache.open(image_name, 'w+') as f:
+				logger.info('Opening %s', f.name)
 				data = f.read()
+				if len(data) is 0:
+					logger.info('Downloading: %s', image)
+					data = urllib2.urlopen(image).read()
+					f.write(data)
+		else:
+			data = image
 
 		try:
 			self.notify(
