@@ -8,9 +8,12 @@ import os
 import AnimeNFO
 from AnimeNFO.cli import Growl, daemon
 
-LOG_FORMAT = '%(asctime)s %(levelname)-8s %(name)-12s %(message)s'
+LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
 DEFAULT_PID = os.path.realpath('./radio.pid')
 DEFAULT_LOG = os.path.realpath('./radio.log')
+
+TITLE_FORMAT = u'{s.title} - {s.artist} - {s.album}'
+INFO_FORMAT = u'[{s.duration[0]}/{s.duration[1]}  Rating:[{s.rating}/10]'
 
 
 class Parser(argparse.ArgumentParser):
@@ -21,8 +24,7 @@ class Parser(argparse.ArgumentParser):
 		argparse.ArgumentParser.__init__(self)
 		self.add_argument('-p', '--pid', default=DEFAULT_PID, type=store_path)
 		self.add_argument('-l', '--log', default=DEFAULT_LOG, type=store_path)
-		self.add_argument('-v', '--verbose', default=logging.INFO,
-			action='store_const', const=logging.DEBUG)
+		self.add_argument('-v', '--verbose', action='count', default=0)
 		self.add_argument('daemon', nargs='?', choices=['start', 'stop', 'restart'])
 
 
@@ -46,15 +48,11 @@ class Radio(daemon.Daemon):
 		previous = ''
 		while(True):
 			playing = now_playing()
-			title = u'%s - %s - %s' % (playing.title, playing.artist, playing.album)
+			title = TITLE_FORMAT.format(s=playing)
 			if title != previous:
-				message = u'[%s/%s]  Rating:[%s/10]' % (
-							playing.duration[0],
-							playing.duration[1],
-							playing.rating
-						)
+				message = INFO_FORMAT.format(s=playing)
 				logging.info('%s %s', title, message)
-				growl.alert(title, message, playing.image)
+				growl.alert(title, message, playing.image, AnimeNFO.PLAY_URL)
 			if not loop:
 				break
 			time_left = to_seconds(playing.duration[0])
@@ -70,6 +68,7 @@ def main():
 		pass
 
 	options = Parser().parse_args()
+	options.verbose = logging.WARNING - options.verbose * 10
 	radio = Radio(options.pid)
 
 	if options.daemon == 'start':

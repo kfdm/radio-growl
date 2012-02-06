@@ -1,6 +1,8 @@
 import gntp.notifier
 import logging
 
+logger = logging.getLogger(__name__)
+
 
 class GrowlNotifier(gntp.notifier.GrowlNotifier):
 	def __init__(self):
@@ -14,17 +16,20 @@ class GrowlNotifier(gntp.notifier.GrowlNotifier):
 		try:
 			self.register()
 		except:
-			logging.getLogger(__name__).exception('Is growl running ? Exiting....')
+			logger.exception('Is growl running ? Exiting....')
 			exit()
 
-	def alert(self, title, message, image):
+	def add_origin_info(self, packet):
+		pass
+
+	def alert(self, title, message, image, callback):
 		try:
 			self.notify(
 				noteType='Now Playing',
 				title=title,
 				description=message,
 				icon=image,
-				#callback=AnimeNFO.PLAY_URL,
+				callback=callback,
 				)
 		except:
-			logging.getLogger(__name__).exception('Is growl running ?')
+			logger.exception('Is growl running ?')
