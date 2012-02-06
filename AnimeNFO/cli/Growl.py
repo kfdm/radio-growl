@@ -1,23 +1,24 @@
-import gntp.config
 import logging
-from clint import resources
-import urllib2
-
 logger = logging.getLogger(__name__)
+import gntp.config
+import hashlib
+from AnimeNFO.cli import Cache
 
 
 class GrowlNotifier(gntp.config.GrowlNotifier):
 	def __init__(self, use_cache=False):
+		self.use_cache = use_cache
+
+		image = 'http://www.animenfo.com/favicon.ico'
+		if self.use_cache:
+			image = Cache.image_cache(image)
+
 		gntp.notifier.GrowlNotifier.__init__(
 			self,
 			applicationName='AnimeNFO Radio',
 			notifications=['Now Playing'],
-			applicationIcon='http://www.animenfo.com/favicon.ico',
+			applicationIcon=image,
 		)
-
-		self.use_cache = use_cache
-
-		resources.init('kfdm', 'radio-growl')
 
 		try:
 			self.register()
@@ -30,25 +31,19 @@ class GrowlNotifier(gntp.config.GrowlNotifier):
 
 	def alert(self, title, message, image, callback):
 		if self.use_cache:
-			data = None
-			image_name = image.split('/').pop()
-			with resources.cache.open(image_name, 'w+') as f:
-				logger.info('Opening %s', f.name)
-				data = f.read()
-				if len(data) is 0:
-					logger.info('Downloading: %s', image)
-					data = urllib2.urlopen(image).read()
-					f.write(data)
-		else:
-			data = image
+			image = Cache.image_cache(image)
 
 		try:
 			self.notify(
 				noteType='Now Playing',
 				title=title,
 				description=message,
-				icon=data,
+				icon=image,
 				callback=callback,
 				)
 		except:
 			logger.exception('Is growl running ?')
+
+	def notify_hook(self, packet):
+		id = hashlib.md5(packet.headers['Notification-Title']).hexdigest()
+		packet.add_header('Notification-Coalescing-ID', id)
