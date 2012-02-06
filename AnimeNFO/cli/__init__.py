@@ -45,7 +45,7 @@ class Radio(daemon.Daemon):
 				except IOError:
 					logging.debug('Timeout.  Sleeping for 20')
 					time.sleep(20)
-		growl = Growl.GrowlNotifier(use_cache)
+		growl = Growl.GrowlNotifier(self.options.use_cache)
 		previous = ''
 		while(True):
 			playing = now_playing()
