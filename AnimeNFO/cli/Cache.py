@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 import urllib2
 from clint import resources
+import Image
 
 resources.init('kfdm', 'radio-growl')
 
@@ -20,4 +21,15 @@ def image_cache(url):
 			logger.info('Downloading: %s', url)
 			data = urllib2.urlopen(url).read()
 			f.write(data)
-		return data
+			f.flush()
+
+			if not f.name.endswith('.ico'):
+				logger.info('Resizing: %s', image_name)
+				img = Image.open(f.name)
+				img = img.resize((150, 150), Image.ANTIALIAS)
+				img.save(f.name)
+
+				# Reload the image
+				data = open(f.name).read()
+
+	return data
