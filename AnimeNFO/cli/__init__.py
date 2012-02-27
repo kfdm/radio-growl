@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-import time
 import logging
+logger = logging.getLogger(__name__)
+
+import time
 import argparse
 import os
 
@@ -43,7 +45,7 @@ class Radio(daemon.Daemon):
 				try:
 					return AnimeNFO.now_playing()
 				except IOError:
-					logging.debug('Timeout.  Sleeping for 20')
+					logger.debug('Timeout.  Sleeping for 20')
 					time.sleep(20)
 		growl = Growl.GrowlNotifier(self.options.use_cache)
 		previous = ''
@@ -52,12 +54,12 @@ class Radio(daemon.Daemon):
 			title = TITLE_FORMAT.format(s=playing)
 			if title != previous:
 				message = INFO_FORMAT.format(s=playing)
-				logging.info('%s %s', title, message)
+				logger.info('%s %s', title, message)
 				growl.alert(title, message, playing.image, AnimeNFO.API_URL)
 			if not loop:
 				break
 			time_left = to_seconds(playing.duration[0])
-			logging.debug('Sleeping for %d', time_left)
+			logger.debug('Sleeping for %d', time_left)
 			time.sleep(time_left + 5)
 
 
