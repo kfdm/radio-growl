@@ -53,7 +53,7 @@ class Radio(daemon.Daemon):
 			if title != previous:
 				message = INFO_FORMAT.format(s=playing)
 				logging.info('%s %s', title, message)
-				growl.alert(title, message, playing.image, AnimeNFO.PLAY_URL)
+				growl.alert(title, message, playing.image, AnimeNFO.API_URL)
 			if not loop:
 				break
 			time_left = to_seconds(playing.duration[0])
