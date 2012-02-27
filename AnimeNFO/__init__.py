@@ -8,7 +8,8 @@ __all__ = [
 	'PLAY_URL',
 	'Song',
 	'now_playing',
-	'upcoming'
+	'upcoming',
+	'main',
 ]
 
 BASE_URL = 'http://www.animenfo.com/radio/'
@@ -93,7 +94,8 @@ def upcoming():
 		songs.append(row)
 	return songs
 
-if __name__ == '__main__':
+
+def main():
 	song = now_playing()
 	list = upcoming()
 	print 'Now Playing'
@@ -104,3 +106,6 @@ if __name__ == '__main__':
 	print 'Upcoming'
 	for item in list:
 		print item
+
+if __name__ == '__main__':
+	main()

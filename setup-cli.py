@@ -19,7 +19,9 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'radio-growl = AnimeNFO.cli:main'
+            'radio-growl = AnimeNFO.cli:main',
+            'radio = AnimeNFO:now_playing',
+            'radio-upcoming = AnimeNFO:main'
         ]
     }
 )
