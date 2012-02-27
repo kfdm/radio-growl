@@ -11,8 +11,8 @@ setup(
     author='Paul Traylor',
     url='http://github.com/kfdm/radio-growl',
     version='0.2',
-    py_modules=['AnimeNFO', 'AnimeNFO.cli'],
-    install_requires=['BeautifulSoup', 'gntp'],
+    packages=['AnimeNFO', 'AnimeNFO.cli'],
+    install_requires=['BeautifulSoup', 'gntp', 'PIL'],
     dependency_links=[
         "https://github.com/kfdm/gntp/tarball/master#egg=gntp",
         "https://github.com/kfdm/pydefaults/tarball/master#egg=pydefaults",
