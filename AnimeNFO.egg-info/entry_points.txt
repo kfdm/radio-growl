@@ -1,0 +1,4 @@
+[console_scripts]
+radio-upcoming = AnimeNFO:main
+radio = AnimeNFO:now_playing
+
