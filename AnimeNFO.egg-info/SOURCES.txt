@@ -1,6 +1,7 @@
 README
 setup.py
 AnimeNFO/__init__.py
+AnimeNFO/__main__.py
 AnimeNFO.egg-info/PKG-INFO
 AnimeNFO.egg-info/SOURCES.txt
 AnimeNFO.egg-info/dependency_links.txt
