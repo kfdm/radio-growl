@@ -13,7 +13,7 @@ class GrowlNotifier(gntp.config.GrowlNotifier):
 		if self.use_cache:
 			image = Cache.image_cache(image)
 
-		gntp.notifier.GrowlNotifier.__init__(
+		gntp.config.GrowlNotifier.__init__(
 			self,
 			applicationName='AnimeNFO Radio',
 			notifications=['Now Playing'],
