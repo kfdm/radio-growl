@@ -9,7 +9,6 @@ __all__ = [
 	'Song',
 	'now_playing',
 	'upcoming',
-	'main',
 ]
 
 BASE_URL = 'http://www.animenfo.com/radio/'
@@ -106,6 +105,10 @@ def main():
 	print 'Upcoming'
 	for item in list:
 		print item
+
+
+def simple():
+	print now_playing()
 
 if __name__ == '__main__':
 	main()

@@ -4,7 +4,7 @@ from setuptools import setup
 install_requires = ['BeautifulSoup']
 packages = ['AnimeNFO']
 console_scripts = [
-    'radio = AnimeNFO:now_playing',
+    'radio = AnimeNFO:simple',
     'radio-upcoming = AnimeNFO:main',
 ]
 
