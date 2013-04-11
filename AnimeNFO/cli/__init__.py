@@ -8,11 +8,10 @@ import argparse
 import os
 
 import AnimeNFO
+from AnimeNFO.cli import paths
 from AnimeNFO.cli import Growl, daemon
 
 LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
-DEFAULT_PID = os.path.realpath('./radio.pid')
-DEFAULT_LOG = os.path.realpath('./radio.log')
 
 TITLE_FORMAT = u'{s.title} - {s.artist} - {s.album}'
 INFO_FORMAT = u'[{s.duration[0]}/{s.duration[1]}  Rating:[{s.rating}/10]'
@@ -24,8 +23,8 @@ class Parser(argparse.ArgumentParser):
 			return os.path.realpath(value)
 
 		argparse.ArgumentParser.__init__(self)
-		self.add_argument('-p', '--pid', default=DEFAULT_PID, type=store_path)
-		self.add_argument('-l', '--log', default=DEFAULT_LOG, type=store_path)
+		self.add_argument('-p', '--pid', default=paths.PID_PATH, type=store_path)
+		self.add_argument('-l', '--log', default=paths.LOG_PATH, type=store_path)
 		self.add_argument('-v', '--verbose', action='count', default=0)
 		self.add_argument('--cache', dest='use_cache', action='store_true')
 		self.add_argument('daemon', nargs='?', choices=['start', 'stop', 'restart'])
@@ -72,6 +71,12 @@ def main():
 
 	options = Parser().parse_args()
 	options.verbose = logging.WARNING - options.verbose * 10
+
+	for path in [options.pid, options.log]:
+		path = os.path.dirname(path)
+		if not os.path.exists(path):
+			os.makedirs(path)
+
 	radio = Radio(options.pid)
 	radio.options = options
 
