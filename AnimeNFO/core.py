@@ -7,8 +7,6 @@ import re
 import logging
 from bs4 import BeautifulSoup
 
-import AnimeNFO.version
-
 logger = logging.getLogger(__name__)
 
 __all__ = [

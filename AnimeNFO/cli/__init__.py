@@ -8,8 +8,7 @@ import os
 import requests
 
 import AnimeNFO.core
-from AnimeNFO.cli import paths
-from AnimeNFO.cli import Growl
+from AnimeNFO.cli import paths, Growl
 from AnimeNFO.vendor import daemon
 
 LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
@@ -17,10 +16,7 @@ LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
 TITLE_FORMAT = '{s.title} - {s.artist} - {s.album}'
 INFO_FORMAT = '[{s.duration[0]}/{s.duration[1]}  Rating:[{s.rating}/10]'
 
-
-def _default_user_agent(name='radio-growl'):
-	return AnimeNFO.version.USER_AGENT
-requests.utils.default_user_agent = _default_user_agent
+requests.utils.default_user_agent = AnimeNFO.version.default_user_agent
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +81,7 @@ def upcoming():
 
 def simple():
 	print(AnimeNFO.core.now_playing())
+
 
 def main():
 	try:
