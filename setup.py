@@ -1,6 +1,6 @@
 import sys
 from setuptools import setup
-from AnimeNFO import __version__
+from AnimeNFO import __version__, HOME_PAGE
 
 install_requires = ['BeautifulSoup4', 'requests']
 packages = ['AnimeNFO']
@@ -20,7 +20,7 @@ setup(
     name='AnimeNFO',
     description='AnimeNFO Radio Notifier',
     author='Paul Traylor',
-    url='http://github.com/kfdm/radio-growl',
+    url=HOME_PAGE,
     version=__version__,
     packages=packages,
     install_requires=install_requires,

@@ -7,6 +7,8 @@ import re
 import logging
 from bs4 import BeautifulSoup
 
+import AnimeNFO.version
+
 logger = logging.getLogger(__name__)
 
 __all__ = [
@@ -55,7 +57,11 @@ def _find(regex, source, default):
 
 def now_playing():
 	# curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
-	page = requests.get(API_URL, {'ajax': 'true', 'mod': 'playing'})
+	page = requests.get(
+		API_URL,
+		data={'ajax': 'true', 'mod': 'playing'},
+		headers={'user-agent': AnimeNFO.version.USER_AGENT},
+	)
 	song = Song()
 
 	song.artist = _find('<span data-search-artist >(.+?)</span>', page.text, 'Artist')
@@ -79,7 +85,11 @@ def now_playing():
 
 def upcoming():
 	# curl -d ajax=true -d mod=queue http://www.animenfo.com/radio/nowplaying.php
-	page = requests.get(API_URL, {'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'})
+	page = requests.get(
+		API_URL,
+		data={'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'},
+		headers={'user-agent': AnimeNFO.version.USER_AGENT},
+	)
 	results = BeautifulSoup(page.text).findAll('tr')
 
 	results.pop()
