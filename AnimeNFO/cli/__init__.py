@@ -9,7 +9,8 @@ import os
 
 import AnimeNFO.core
 from AnimeNFO.cli import paths
-from AnimeNFO.cli import Growl, daemon
+from AnimeNFO.cli import Growl
+from AnimeNFO.vendor import daemon
 
 LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
 
