@@ -48,41 +48,48 @@ def _find(regex, source, default):
 		result = re.findall(regex, source)
 		string = ''.join(BeautifulSoup(result[0]).findAll(text=True))
 		return BeautifulSoup(string)
-	except:
-		logger.exception('Error looking up %s', regex)
+	except IndexError:
+		#logger.exception('Error finding result %s %s', regex, source)
+		pass
+	except Exception:
+		#logger.exception('Error looking up %s in %s', regex, source)
 		return default
 
 
 def now_playing():
 	# curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
-	page = requests.get(
+	page = requests.post(
 		API_URL,
 		data={'ajax': 'true', 'mod': 'playing'},
 	)
 	song = Song()
-
-	song.artist = _find('<span data-search-artist >(.+?)</span>', page.text, 'Artist')
-	song.title = _find('Title:</span> (.+?)<br/>', page.text, 'Title')
-	song.album = _find('<span data-search-album >(.+?)</span>', page.text, 'Album')
+	soup = BeautifulSoup(page.text)
+	if logger.isEnabledFor(logging.INFO):
+		print(soup.prettify())
+	#song.artist = soup.find(attrs={'data-search-artist': ''})
+	song.title = soup.find(class_='icon-songinfo')['data-title']
+	#song.album = soup.find(attrs={'data-search-album': ''})
 	song.rating = _find('Rating: (.+?) .+<br/>', page.text, 'Rating')
 
 	try:
-		song.duration = re.findall('Duration: <span .+>(.+?)</span> / <span .+>(.+?)</span><br/>', page.text)[0]
+		song.duration = soup.find(id='np_timer')['rel'], soup.find(id='np_time')['rel']
 	except:
 		song.duration = (0, 0)
 
 	try:
-		song.image = re.findall('src="(radio\/albumart\/.+?)"', page.text)[0]
-		song.image = BASE_URL + urllib.parse.quote(song.image)
+		song.image = soup.find(id="nowplaying_albumart")['src']
 	except:
 		song.image = None
+
+	if logger.isEnabledFor(logging.INFO):
+		print(song)
 
 	return song
 
 
 def upcoming():
 	# curl -d ajax=true -d mod=queue http://www.animenfo.com/radio/nowplaying.php
-	page = requests.get(
+	page = requests.post(
 		API_URL,
 		data={'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'},
 	)
