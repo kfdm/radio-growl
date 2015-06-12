@@ -1,8 +1,13 @@
 import logging
-logger = logging.getLogger(__name__)
-import gntp.config
+import platform
 import hashlib
+
+import gntp.config
+
 from AnimeNFO.cli import Cache
+from AnimeNFO import __version__
+
+logger = logging.getLogger(__name__)
 
 
 class GrowlNotifier(gntp.config.GrowlNotifier):
@@ -27,7 +32,12 @@ class GrowlNotifier(gntp.config.GrowlNotifier):
 			exit()
 
 	def add_origin_info(self, packet):
-		pass
+		"""Add optional Origin headers to message"""
+		packet.add_header('Origin-Machine-Name', platform.node())
+		packet.add_header('Origin-Software-Name', 'radio-growl')
+		packet.add_header('Origin-Software-Version', __version__)
+		packet.add_header('Origin-Platform-Name', platform.system())
+		packet.add_header('Origin-Platform-Version', platform.platform())
 
 	def alert(self, title, message, image, callback):
 		if self.use_cache:
@@ -45,5 +55,5 @@ class GrowlNotifier(gntp.config.GrowlNotifier):
 			logger.exception('Is growl running ?')
 
 	def notify_hook(self, packet):
-		id = hashlib.md5(packet.headers['Notification-Title']).hexdigest()
+		id = hashlib.md5(packet.headers['Notification-Title'].encode('utf-8')).hexdigest()
 		packet.add_header('Notification-Coalescing-ID', id)

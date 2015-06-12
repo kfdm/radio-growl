@@ -1,11 +1,12 @@
 import sys
 from setuptools import setup
+from AnimeNFO import __version__
 
 install_requires = ['BeautifulSoup4', 'requests']
 packages = ['AnimeNFO']
 console_scripts = [
-    'radio = AnimeNFO:simple',
-    'radio-upcoming = AnimeNFO:main',
+    'radio = AnimeNFO.cli:simple',
+    'radio-upcoming = AnimeNFO.cli:upcoming',
 ]
 
 if '--extras' in sys.argv:
@@ -20,7 +21,7 @@ setup(
     description='AnimeNFO Radio Notifier',
     author='Paul Traylor',
     url='http://github.com/kfdm/radio-growl',
-    version='0.2',
+    version=__version__,
     packages=packages,
     install_requires=install_requires,
     entry_points={

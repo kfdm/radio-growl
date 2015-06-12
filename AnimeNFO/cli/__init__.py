@@ -7,7 +7,7 @@ import time
 import argparse
 import os
 
-import AnimeNFO
+import AnimeNFO.core
 from AnimeNFO.cli import paths
 from AnimeNFO.cli import Growl, daemon
 
@@ -42,7 +42,7 @@ class Radio(daemon.Daemon):
 		def now_playing():
 			while(1):
 				try:
-					return AnimeNFO.now_playing()
+					return AnimeNFO.core.now_playing()
 				except IOError:
 					logger.debug('Timeout.  Sleeping for 20')
 					time.sleep(20)
@@ -54,13 +54,29 @@ class Radio(daemon.Daemon):
 			if title != previous:
 				message = INFO_FORMAT.format(s=playing)
 				logger.info('%s %s', title, message)
-				growl.alert(title, message, playing.image, AnimeNFO.API_URL)
+				growl.alert(title, message, playing.image, AnimeNFO.core.API_URL)
 			if not loop:
 				break
 			time_left = to_seconds(playing.duration[0])
 			logger.debug('Sleeping for %d', time_left)
 			time.sleep(time_left + 5)
 
+
+def upcoming():
+	song = AnimeNFO.core.now_playing()
+	list = AnimeNFO.core.upcoming()
+	print('Now Playing')
+	print(song)
+	if song.image:
+		print(song.image.replace(' ', '%20'))
+	print()
+	print('Upcoming')
+	for item in list:
+		print(item)
+
+
+def simple():
+	print(AnimeNFO.core.now_playing())
 
 def main():
 	try:
