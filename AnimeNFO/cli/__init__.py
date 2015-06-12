@@ -13,8 +13,8 @@ from AnimeNFO.cli import Growl, daemon
 
 LOG_FORMAT = "%(asctime)s\t%(levelname)8s\t%(name)-12s\t%(message)s"
 
-TITLE_FORMAT = u'{s.title} - {s.artist} - {s.album}'
-INFO_FORMAT = u'[{s.duration[0]}/{s.duration[1]}  Rating:[{s.rating}/10]'
+TITLE_FORMAT = '{s.title} - {s.artist} - {s.album}'
+INFO_FORMAT = '[{s.duration[0]}/{s.duration[1]}  Rating:[{s.rating}/10]'
 
 
 class Parser(argparse.ArgumentParser):

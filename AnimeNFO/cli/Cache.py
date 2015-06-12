@@ -1,6 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from clint import resources
 from PIL import Image
 
@@ -19,7 +19,7 @@ def image_cache(url):
 		data = f.read()
 		if len(data) is 0:
 			logger.info('Downloading: %s', url)
-			data = urllib2.urlopen(url).read()
+			data = urllib.request.urlopen(url).read()
 			f.write(data)
 			f.flush()
 

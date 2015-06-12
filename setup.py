@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup
 
-install_requires = ['BeautifulSoup']
+install_requires = ['BeautifulSoup4', 'requests']
 packages = ['AnimeNFO']
 console_scripts = [
     'radio = AnimeNFO:simple',

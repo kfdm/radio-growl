@@ -1,8 +1,10 @@
-import urllib
-import urllib2
+import urllib.request
+import urllib.parse
+import urllib.error
+import urllib.parse
 import re
 import logging
-from BeautifulSoup import BeautifulStoneSoup
+from bs4 import BeautifulStoneSoup
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +45,7 @@ def _find(regex, source, default):
 	'''Find a string using a regex and strip extra HTML'''
 	try:
 		result = re.findall(regex, source)
-		print result
+		print(result)
 		string = ''.join(BeautifulStoneSoup(result[0]).findAll(text=True))
 		return BeautifulStoneSoup(string, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 	except:
@@ -52,9 +54,9 @@ def _find(regex, source, default):
 
 
 def now_playing():
-	#curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
-	data = urllib.urlencode({'ajax': 'true', 'mod': 'playing'})
-	page = urllib2.urlopen(API_URL, data)
+	# curl -d ajax=true -d mod=playing http://www.animenfo.com/radio/nowplaying.php
+	data = urllib.parse.urlencode({'ajax': 'true', 'mod': 'playing'})
+	page = urllib.request.urlopen(API_URL, data)
 	page = page.read()
 	song = Song()
 
@@ -70,8 +72,8 @@ def now_playing():
 
 	try:
 		song.image = re.findall('src="(radio\/albumart\/.+?)"', page)[0]
-		print song.image
-		song.image = BASE_URL + urllib.quote(song.image)
+		print(song.image)
+		song.image = BASE_URL + urllib.parse.quote(song.image)
 	except:
 		song.image = None
 
@@ -79,9 +81,9 @@ def now_playing():
 
 
 def upcoming():
-	#curl -d ajax=true -d mod=queue http://www.animenfo.com/radio/nowplaying.php
-	data = urllib.urlencode({'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'})
-	page = urllib2.urlopen(API_URL, data)
+	# curl -d ajax=true -d mod=queue http://www.animenfo.com/radio/nowplaying.php
+	data = urllib.parse.urlencode({'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'})
+	page = urllib.request.urlopen(API_URL, data)
 	page = page.read()
 
 	results = BeautifulStoneSoup(page).findAll('tr')
@@ -91,7 +93,7 @@ def upcoming():
 	songs = []
 	for row in results:
 		row = ''.join(row.findAll(text=True))
-		if row.strip() == u'':
+		if row.strip() == '':
 			continue
 		row = BeautifulStoneSoup(row, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 		row = row.__str__().strip()
@@ -103,18 +105,18 @@ def upcoming():
 def main():
 	song = now_playing()
 	list = upcoming()
-	print 'Now Playing'
-	print song
+	print('Now Playing')
+	print(song)
 	if song.image:
-		print song.image.replace(' ', '%20')
-	print
-	print 'Upcoming'
+		print(song.image.replace(' ', '%20'))
+	print()
+	print('Upcoming')
 	for item in list:
-		print item
+		print(item)
 
 
 def simple():
-	print now_playing()
+	print(now_playing())
 
 if __name__ == '__main__':
 	main()
