@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 import urllib2
 from clint import resources
-import Image
+from PIL import Image
 
 resources.init('kfdm', 'radio-growl')
 

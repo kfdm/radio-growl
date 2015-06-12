@@ -1,7 +1,10 @@
 import urllib
 import urllib2
 import re
+import logging
 from BeautifulSoup import BeautifulStoneSoup
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
 	'API_URL',
@@ -11,9 +14,9 @@ __all__ = [
 	'upcoming',
 ]
 
-BASE_URL = 'http://www.animenfo.com/radio/'
-API_URL = 'http://www.animenfo.com/radio/nowplaying.php'
-PLAY_URL = 'http://www.animenfo.com/radio/listen.m3u'
+BASE_URL = 'https://www.animenfo.com/radio/'
+API_URL = 'https://www.animenfo.com/radio/nowplaying.php'
+PLAY_URL = 'https://www.animenfo.com/radio/listen.m3u'
 
 
 class Song(object):
@@ -39,10 +42,12 @@ class Song(object):
 def _find(regex, source, default):
 	'''Find a string using a regex and strip extra HTML'''
 	try:
-		string = re.findall(regex, source)[0]
-		string = ''.join(BeautifulStoneSoup(string).findAll(text=True))
+		result = re.findall(regex, source)
+		print result
+		string = ''.join(BeautifulStoneSoup(result[0]).findAll(text=True))
 		return BeautifulStoneSoup(string, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
 	except:
+		logger.exception('Error looking up %s', regex)
 		return default
 
 
@@ -53,9 +58,9 @@ def now_playing():
 	page = page.read()
 	song = Song()
 
-	song.artist = _find('Artist: (.+?)<br/>', page, 'Artist')
-	song.title = _find('Title: (.+?)<br/>', page, 'Title')
-	song.album = _find('Album: (.+?)<br/>', page, 'Album')
+	song.artist = _find('<span data-search-artist >(.+?)</span>', page, 'Artist')
+	song.title = _find('Title:</span> (.+?)<br/>', page, 'Title')
+	song.album = _find('<span data-search-album >(.+?)</span>', page, 'Album')
 	song.rating = _find('Rating: (.+?) .+<br/>', page, 'Rating')
 
 	try:
@@ -64,7 +69,8 @@ def now_playing():
 		song.duration = (0, 0)
 
 	try:
-		song.image = re.findall('src="(pictures\/.+?)"', page)[0]
+		song.image = re.findall('src="(radio\/albumart\/.+?)"', page)[0]
+		print song.image
 		song.image = BASE_URL + urllib.quote(song.image)
 	except:
 		song.image = None

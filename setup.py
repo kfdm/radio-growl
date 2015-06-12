@@ -10,7 +10,7 @@ console_scripts = [
 
 if '--extras' in sys.argv:
     sys.argv.remove('--extras')
-    install_requires += ['gntp', 'clint', 'PIL']
+    install_requires += ['gntp', 'clint', 'pillow']
     packages += ['AnimeNFO.cli']
     console_scripts += ['radio-growl = AnimeNFO.cli:main']
 
