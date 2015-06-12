@@ -60,7 +60,6 @@ def now_playing():
 	page = requests.get(
 		API_URL,
 		data={'ajax': 'true', 'mod': 'playing'},
-		headers={'user-agent': AnimeNFO.version.USER_AGENT},
 	)
 	song = Song()
 
@@ -88,7 +87,6 @@ def upcoming():
 	page = requests.get(
 		API_URL,
 		data={'ajax': 'true', 'mod': 'queue', 'togglefull': 'true'},
-		headers={'user-agent': AnimeNFO.version.USER_AGENT},
 	)
 	results = BeautifulSoup(page.text).findAll('tr')
 
