@@ -1,6 +1,6 @@
 import sys
 from setuptools import setup
-from AnimeNFO import __version__, HOME_PAGE
+from AnimeNFO.version import __version__, HOME_PAGE
 
 install_requires = ['BeautifulSoup4', 'requests']
 packages = ['AnimeNFO']
