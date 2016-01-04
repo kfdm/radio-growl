@@ -1,5 +1,6 @@
-from setuptools import setup
-from AnimeNFO.version import __version__, HOME_PAGE
+from setuptools import setup, find_packages
+
+from AnimeNFO.version import HOME_PAGE, __version__
 
 setup(
     name='AnimeNFO',
@@ -7,9 +8,18 @@ setup(
     author='Paul Traylor',
     url=HOME_PAGE,
     version=__version__,
-    packages=['AnimeNFO', 'AnimeNFO.cli'],
-    install_requires=['BeautifulSoup4', 'requests'],
-    extras_require={'extras': ['gntp', 'clint', 'pillow']},
+    packages=find_packages(exclude=['test']),
+    install_requires=[
+        'BeautifulSoup4',
+        'lxml',
+        'requests',
+    ],
+    extras_require={
+        'extras': [
+            'clint',
+            'gntp',
+            'pillow',
+        ]},
     entry_points={
         'console_scripts': {
             'radio = AnimeNFO.cli:simple',
